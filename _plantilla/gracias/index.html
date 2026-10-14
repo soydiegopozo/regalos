@@ -7,6 +7,10 @@
 <title>Tu regalo está listo · Soy Diego Pozo</title>
 <!-- La página de acceso nunca debe aparecer en Google -->
 <meta name="robots" content="noindex, nofollow">
+<!-- CONTRASEÑA: pon aquí el hash de la contraseña del regalo (sácalo en /_plantilla/generar-clave/).
+     Este ejemplo corresponde a la contraseña "regalo2026". -->
+<meta name="clave" content="5aa54c3a0e38f141f9ad6c87cc83c9b52b7e9b8ee86d08796b90f5379615a0aa">
+<script src="/acceso.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -27,7 +31,7 @@
     <p class="sub">EDITAR: una línea sobre cómo usarlo (ej. "Haz una copia antes de editarla").</p>
 
     <!-- EDITAR: link al regalo y texto del botón según el tipo:
-         PDF        → href="regalo.pdf" download          "Descargar la guía"
+         PDF        → link de Drive (no lo subas al repo)  "Descargar la guía"
          Plantilla  → link de Canva / Google Sheets        "Hacer mi copia de la plantilla"
          Video      → link de YouTube no listado / Loom     "Ver la clase"
          Herramienta→ link a la herramienta                 "Abrir la herramienta"
