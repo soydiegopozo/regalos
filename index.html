@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Regalos · Soy Diego Pozo</title>
+<meta name="description" content="Guías, plantillas y herramientas gratis de media buying de Soy Diego Pozo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/estilos.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="band">
+    <p class="eyebrow">Soy Diego Pozo</p>
+    <h1>Regalos</h1>
+    <p>Guías, plantillas y herramientas de media buying que uso con mis clientes. Gratis: dejas tu correo y te llega el acceso.</p>
+  </header>
+
+  <!-- ============================================================
+       LISTA DE REGALOS
+       Para agregar uno, copia este bloque, quita los comentarios
+       y cambia carpeta, tipo, título y descripción:
+
+       <a class="gift" href="/nombre-del-regalo/">
+         <span class="badge">Plantilla</span>
+         <h2>Título del regalo</h2>
+         <p>Qué consigue la persona con él, en una frase.</p>
+         <span class="go">Quiero el mío →</span>
+       </a>
+
+       Cuando agregues el primero, borra el bloque "empty" de abajo.
+       ============================================================ -->
+  <div class="grid" id="lista">
+  </div>
+
+  <div class="empty" id="vacio">
+    <h2>Muy pronto</h2>
+    <p>Estoy preparando los primeros regalos. Mientras tanto, prueba las herramientas gratis en <a href="https://tools.diegopozo.com">tools.diegopozo.com</a>.</p>
+  </div>
+
+  <footer>
+    <a href="https://instagram.com/soydiegopozo" rel="noopener">@soydiegopozo</a> · <a href="https://tools.diegopozo.com">tools.diegopozo.com</a>
+  </footer>
+</div>
+<script>
+  // Hide the empty state automatically once the list has at least one gift.
+  if (document.querySelector('#lista .gift')) document.getElementById('vacio').hidden = true;
+</script>
+</body>
+</html>
