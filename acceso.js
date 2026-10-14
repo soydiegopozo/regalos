@@ -92,6 +92,14 @@
   var m = location.hash.match(/clave=([^&]+)/);
   var fromLink = m ? decodeURIComponent(m[1]) : "";
 
+  // Same-page arrival (gate already open, then the #clave link is opened in that tab).
+  window.addEventListener("hashchange", async function () {
+    var h = location.hash.match(/clave=([^&]+)/);
+    if (!h) return;
+    history.replaceState(null, "", location.pathname + location.search);
+    await tryPassword(decodeURIComponent(h[1]));
+  });
+
   document.addEventListener("DOMContentLoaded", async function () {
     if (fromLink) {
       history.replaceState(null, "", location.pathname + location.search);
