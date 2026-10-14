@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Generar clave · Regalos</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/estilos.css">
+<style>
+  .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+  .field label{ font-size:12px; font-weight:600; color:var(--fg-soft); }
+  .field input{ font:inherit; font-size:15px; padding:11px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--fg); outline:none; width:100%; }
+  .field input:focus{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  .out{ font-family:var(--font-mono); font-size:13px; background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:12px; word-break:break-all; line-height:1.6; min-height:46px; }
+  .row{ display:flex; gap:10px; align-items:flex-start; margin-bottom:14px; }
+  .row .out{ flex:1; }
+  .lbl{ font-size:12px; font-weight:600; color:var(--fg-soft); margin:0 0 6px; }
+</style>
+</head>
+<body>
+<div class="wrap narrow">
+  <header class="band">
+    <p class="eyebrow"><a href="/">Soy Diego Pozo · Regalos</a></p>
+    <h1>Generar clave de un regalo</h1>
+    <p>Escribe la contraseña y la carpeta del regalo. Te doy la línea para pegar en su página de acceso y el link que abre solo.</p>
+  </header>
+
+  <section class="card">
+    <div class="field">
+      <label for="pw">Contraseña</label>
+      <input id="pw" type="text" autocomplete="off" placeholder="ej. checklist2026">
+    </div>
+    <div class="field">
+      <label for="slug">Carpeta del regalo</label>
+      <input id="slug" type="text" autocomplete="off" placeholder="ej. checklist-lanzamiento">
+    </div>
+
+    <p class="lbl">1 · Pega esta línea en el &lt;head&gt; de <code>/carpeta/gracias/index.html</code></p>
+    <div class="row"><div class="out" id="meta"></div><button class="btn btn-accent" data-copy="meta" type="button">Copiar</button></div>
+
+    <p class="lbl">2 · Usa este link en la redirección de Systeme y en el correo</p>
+    <div class="row"><div class="out" id="link"></div><button class="btn btn-accent" data-copy="link" type="button">Copiar</button></div>
+  </section>
+</div>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  async function sha256(t){
+    const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t.trim()));
+    return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,"0")).join("");
+  }
+  async function update(){
+    const pw = $("pw").value.trim();
+    const slug = $("slug").value.trim().replace(/^\/+|\/+$/g,"") || "carpeta-del-regalo";
+    if(!pw){ $("meta").textContent = ""; $("link").textContent = ""; return; }
+    $("meta").textContent = '<meta name="clave" content="' + await sha256(pw) + '">';
+    $("link").textContent = "https://regalos.diegopozo.com/" + slug + "/gracias/#clave=" + encodeURIComponent(pw);
+  }
+  $("pw").addEventListener("input", update);
+  $("slug").addEventListener("input", update);
+  document.querySelectorAll("[data-copy]").forEach(btn => btn.addEventListener("click", () => {
+    const text = $(btn.dataset.copy).textContent;
+    if(!text) return;
+    const done = () => { const o = btn.textContent; btn.textContent = "Copiado"; setTimeout(() => btn.textContent = o, 1200); };
+    try { navigator.clipboard.writeText(text).then(done, done); } catch(e){ done(); }
+  }));
+})();
+</script>
+</body>
+</html>
