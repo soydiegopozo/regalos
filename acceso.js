@@ -2,18 +2,23 @@
    No es seguridad real: el contenido sigue en el código de la página. Sirve para que
    quien llegue a la URL sin registrarse vea una pantalla de contraseña.
 
-   Uso en una página:
-     <meta name="clave" content="HASH_SHA256_DE_LA_CONTRASEÑA">
-     <script src="/acceso.js"></script>   (en el <head>, antes de los estilos)
+   Uso en una página: <script src="/acceso.js"></script> en el <head>.
+   Todas las páginas usan la clave del sitio (CLAVE_SITIO, abajo). Una página puede
+   usar otra clave con <meta name="clave" content="HASH">.
+   Textos opcionales de la pantalla: <meta name="candado-titulo" content="…">,
+   <meta name="candado-texto" content="…">, <meta name="candado-link" content="URL|Texto">.
 
    Link que abre solo (para la redirección de Systeme y el correo):
      https://regalos.diegopozo.com/mi-regalo/gracias/#clave=LaContraseña
-   Para sacar el hash de una contraseña: /_plantilla/generar-clave/ */
+   Para cambiar la clave, saca el hash en /_plantilla/generar-clave/ y pégalo aquí. */
 (function () {
+  var CLAVE_SITIO = "9ff99d20143639e735e89246eeb776e6b34b89743d0a1551314abf28346d35f6";
   var meta = document.querySelector('meta[name="clave"]');
-  if (!meta || !meta.content) return;
-  var expected = meta.content.trim().toLowerCase();
-  var storeKey = "regalo-ok:" + location.pathname;
+  var expected = ((meta && meta.content) || CLAVE_SITIO).trim().toLowerCase();
+  if (!expected) return;
+  // Keyed by the hash, so entering the site password once opens every page that uses it.
+  var storeKey = "regalo-ok:" + expected;
+  function metaText(name) { var m = document.querySelector('meta[name="' + name + '"]'); return m ? m.content : ""; }
   var root = document.documentElement;
 
   function remembered() {
@@ -66,13 +71,20 @@
     gate.innerHTML =
       '<form class="box" novalidate>' +
         '<p class="eyebrow">Soy Diego Pozo · Regalos</p>' +
-        '<h1>Este regalo es para quienes se registraron</h1>' +
-        '<p>Escribe la contraseña que te llegó por correo. Si todavía no te registras, hazlo y te la mando al instante.</p>' +
+        '<h1></h1>' +
+        '<p class="msg"></p>' +
         '<input type="password" autocomplete="off" placeholder="Contraseña" aria-label="Contraseña" required>' +
         '<button type="submit">Entrar a mi regalo</button>' +
         '<p class="err" role="alert"></p>' +
-        '<p class="alt"><a href="../">Registrarme para recibirlo</a></p>' +
+        '<p class="alt"><a></a></p>' +
       "</form>";
+    gate.querySelector("h1").textContent = metaText("candado-titulo") || "Este regalo es para quienes se registraron";
+    gate.querySelector(".msg").textContent = metaText("candado-texto") ||
+      "Escribe la contraseña que te llegó por correo. Si todavía no te registras, hazlo y te la mando al instante.";
+    var alt = (metaText("candado-link") || "../|Registrarme para recibirlo").split("|");
+    var a = gate.querySelector(".alt a");
+    a.href = alt[0]; a.textContent = alt[1] || alt[0];
+    if (/^https?:/.test(alt[0])) a.rel = "noopener";
     document.body.prepend(gate);
     var form = gate.querySelector("form");
     var input = gate.querySelector("input");
